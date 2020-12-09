@@ -105,11 +105,11 @@
       // 进行缩放操作
       scale(touchList) {
         // 开始时move后面scale的情况下会没有上一次的scale数据
-        // if (this.touchType !== 'scale') {
-        //   this.scaleStart(touchList);
-        //   this.touchType = "scale";
-        //   return
-        // }
+        if (this.touchType !== 'scale') {
+          this.scaleStart(touchList);
+          this.touchType = "scale";
+          return
+        }
         // 算出当前两指的距离
         const scale = Math.sqrt(
           (touchList[0].clientX - touchList[1].clientX) ** 2 +
