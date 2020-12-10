@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
     * {
@@ -14,7 +14,7 @@
       width: 80vw;
       margin: 10vh 10vw;
       overflow: hidden;
-      border: 1px solid rgb(224, 126, 126);
+      border: 1px solid rgb(199, 117, 117);
     }
     #enlargeScale, #narrowScale {
       height: 60px;
@@ -23,13 +23,54 @@
       position: absolute;
       right: 20px;
       bottom: 250px;
-      background: rgb(211, 105, 105);
+      background: rgb(224, 110, 110);
       color: #ffffff;
       border-radius: 50%;
       text-align: center;
     }
     #narrowScale {
       bottom: 150px;
+    }
+    .switch {
+      height: 35px;
+      width: 65px;
+      position: absolute;
+      right: 20px;
+      bottom: 10px;
+      border-radius: 25px;
+      background-color: rgb(77, 54, 54);
+      transition: all .5s;
+    }
+    .switch::after {
+      content: "";
+      height: 29px;
+      width: 29px;
+      border-radius: 50%;
+      background: azure;
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      transition: all .5s;
+    }
+    .switch-open {
+      background-color: rgb(255, 124, 124);
+    }
+    .switch-open::after {
+      left: calc(100% - 32px);
+    }
+    #perspective {
+      right: 170px;
+    }
+    .switch-label {
+      color: rgb(255, 124, 124);
+      position: absolute;
+      line-height: 35px;
+      right: 90px;
+      bottom: 10px;
+      font-weight: bolder;
+    }
+    .perspective-label {
+      right: 240px;
     }
   </style>
 </head>
@@ -39,18 +80,26 @@
   </div>
   <div id="enlargeScale">放大</div>
   <div id="narrowScale">缩小</div>
+  <div id="damping" class="switch switch-open"></div>
+  <div id="perspective" class="switch"></div>
+  <div class="switch-label damping-label">阻尼感?</div>
+  <div class="switch-label perspective-label">透视感?</div>
   <script>
     class TouchMoveScale {
       constructor (option) {
         this.touchDom = option.touchDom
         this.transformDom = option.transformDom
         this.transformData = {
-          x: option?.transformData?.x || 129,
-          y: option?.transformData?.y || 228,
-          scale: option?.transformData?.scale && .8
+          x: option?.transformData?.x || 0,
+          y: option?.transformData?.y || 0,
+          scale: option?.transformData?.scale || 1
         },
         this.maxScale = option.maxScale || Infinity
         this.minScale = option.minScale || 0
+        // 奇奇怪怪的效果
+        this.damping = option.damping || false
+        // 透视效果
+        this.perspective = option.perspective || false
         // 用来储存上一次的触摸的数据的
         this.store = {
           x: 0,
@@ -128,10 +177,10 @@
       }
       // 进行缩放操作
       scale(touchList) {
-        // 开始时move后面scale的情况下会没有上一次的scale数据
+        // 开始时move后面scale的情况下会没有上一次的scale数据,所以把这次当做start
         if (this.touchType !== 'scale') {
-          this.scaleStart(touchList);
           this.touchType = "scale";
+          this.scaleStart(touchList);
           return
         }
         // 算出当前两指的距离
@@ -166,11 +215,6 @@
             scaleCenter[0] / this.transformDom.offsetWidth,
             scaleCenter[1] / this.transformDom.offsetHeight,
           ];
-          console.log(this.touchDom.offsetWidth);
-          console.log(scaleCenter);
-          console.log(this.transformDom.offsetWidth);
-          console.log(scaleTranslateProportion);
-          console.log(scaleCenter);
         }
         // 设置缩放的偏移,之前纠结在使用两指的偏移位置来计算,实际上缩放后大小的变化不是两指间移动的距离
         // 变化大小其实就是缩放的大小乘原来的大小
@@ -188,9 +232,16 @@
       }
       // 更改移动缩放的效果
       setTransform() {
-        console.log(this.transformData);
+        // console.log(this.transformData);
+        // 奇奇怪怪的效果
+        if (this.damping) {
+          this.transformDom.style.transition = "transform .3s"
+        } else {
+          this.transformDom.style.transition = "none"
+        }
         // 先平移再缩放
         this.transformDom.style.transform = `
+          ${this.perspective ? 'perspective(500px) rotateX(50deg) skewX(-10deg)' : ''}
           translate(${this.transformData.x || 0}px, ${this.transformData.y || 0}px)
           scale(${this.transformData.scale || 0}, ${this.transformData.scale || 0})`;
       }
@@ -228,12 +279,19 @@
       getTransformData () {
         return this.transformData
       }
+      setPerspective (value) {
+        this.perspective = value
+        this.setTransform()
+      }
+      setDamping (value) {
+        this.damping = value
+        this.setTransform()
+      }
       distory() {
         this.touchDom.removeEventListener('touchstart', this.touchstart.bind(this))
         this.touchDom.removeEventListener('touchmove', this.touchmove.bind(this))
         this.touchDom.removeEventListener('touchend', this.touchend.bind(this))
       }
-
     }
   </script>
   <!-- <script type="module"> -->
@@ -243,9 +301,9 @@
       touchDom: document.getElementById('touchBox'),
       transformDom: document.getElementById('transformDom'),
       transformData: {
-        x: 0,
-        y: 0,
-        scale: 1
+        x: 65,
+        y: 172,
+        scale: .16
       },
       minScale: 0,
       maxScale: 0
@@ -256,6 +314,18 @@
     document.getElementById('narrowScale').addEventListener('click', e => {
       touchMoveScale.narrowScale()
     })
+    let damping = false
+    let perspective = false
+    document.getElementById('damping').addEventListener('click', function(e) {
+      damping = !damping
+      this.className = `switch ${damping ? ' switch-open' : ''}`
+      touchMoveScale.setDamping(damping)
+    })
+    document.getElementById('perspective').addEventListener('click', function(e) {
+      perspective = !perspective
+      this.className = `switch ${perspective ? ' switch-open' : ''}`
+      touchMoveScale.setPerspective(perspective)
+    })
   </script>
 </body>
 </html>
@@ -265,6 +335,5 @@
 2.缩放大小的限制
 3.缩放中心
 4.先缩放后移动和先移动后缩放问题,两个坐标,外部容器坐标和内部元素坐标
-
-
+5.targetTouches Touches changeTouches 区别(可以不讲)
  -->
