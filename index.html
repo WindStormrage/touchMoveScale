@@ -27,6 +27,7 @@
       color: #ffffff;
       border-radius: 50%;
       text-align: center;
+      transform: translateZ(120px);
     }
     #narrowScale {
       bottom: 150px;
@@ -40,6 +41,7 @@
       border-radius: 25px;
       background-color: rgb(77, 54, 54);
       transition: all .5s;
+      transform: translateZ(120px);
     }
     .switch::after {
       content: "";
@@ -68,6 +70,7 @@
       right: 90px;
       bottom: 10px;
       font-weight: bolder;
+      transform: translateZ(120px);
     }
     .perspective-label {
       right: 240px;
@@ -336,4 +339,6 @@
 3.缩放中心
 4.先缩放后移动和先移动后缩放问题,两个坐标,外部容器坐标和内部元素坐标
 5.targetTouches Touches changeTouches 区别(可以不讲)
+  targetTouches点到里面的元素会有问题?
+6.控件z轴位移
  -->
