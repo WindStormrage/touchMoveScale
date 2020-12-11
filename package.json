@@ -7,5 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "MIT",
+  "keywords": ["移动端", "双指缩放", "单指移动"],
+  "homepage": "https://github.com/WindStormrage/touchMoveScale",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WindStormrage/touchMoveScale.git"
+  }
 }
