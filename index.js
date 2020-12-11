@@ -37,24 +37,24 @@ export default class TouchMoveScale {
   }
   touchstart (e) {
     e.preventDefault();
-    if (e.targetTouches.length === 1) {
+    if (e.touches.length === 1) {
       // 当前屏幕上只有一个触摸点的时候就是移动
-      this.moveStart(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+      this.moveStart(e.touches[0].clientX, e.touches[0].clientY);
       this.touchType = "move";
-    } else if (e.targetTouches.length === 2) {
+    } else if (e.touches.length === 2) {
       // 如果两个触摸点是缩放
-      this.scaleStart(e.targetTouches);
+      this.scaleStart(e.touches);
       this.touchType = "scale";
     }
   }
   touchmove (e) {
     e.preventDefault();
-    if (e.targetTouches.length === 1 && this.touchType === "move") {
+    if (e.touches.length === 1 && this.touchType === "move") {
       // 如果屏幕上只有一个触摸点而且类型是移动的时候才是移动
-      this.move(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
-    } else if (e.targetTouches.length === 2) {
+      this.move(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length === 2) {
       // 只要有两个触摸点就是缩放,可以从移动转换成缩放
-      this.scale(e.targetTouches);
+      this.scale(e.touches);
     }
   }
   // 开始移动的方法: 记录首次的数据
