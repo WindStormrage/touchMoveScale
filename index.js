@@ -17,7 +17,7 @@ export default class TouchMoveScale {
     this.store = {
       x: 0,
       y: 0,
-      scale: 1
+      distance: 1
     }
     // 触摸的类型
     this.touchType = ''
@@ -75,7 +75,7 @@ export default class TouchMoveScale {
     // 算出当前两指之间的距离
     const x = touchList[0].clientX - touchList[1].clientX;
     const y = touchList[0].clientY - touchList[1].clientY;
-    this.store.scale = Math.sqrt(x ** 2 + y ** 2);
+    this.store.distance = Math.sqrt(x ** 2 + y ** 2);
     // 缩放中心为双指点的中心,此时的双指中心只是touchBox上的,得转换成transformDom上的,
     // 因为缩放中心的位置带来translate的变化,是根据当前触摸中心在transformDom上的比例算出来的
     const scaleCenter = [
@@ -97,19 +97,19 @@ export default class TouchMoveScale {
       return
     }
     // 算出当前两指的距离
-    const scale = Math.sqrt(
+    const distance = Math.sqrt(
       (touchList[0].clientX - touchList[1].clientX) ** 2 +
         (touchList[0].clientY - touchList[1].clientY) ** 2
     );
     // 缩放大小为现在的两指距离除去上次的两指距离
-    this.doscale(scale / this.store.scale, false)
+    this.doscale(distance / this.store.distance, false)
     // 记录这一次两指距离
-    this.store.scale = scale;
+    this.store.distance = distance;
   }
   // 进行指定大小的缩放
-  doscale (size, useCenter = true) {
+  doscale (scale, useCenter = true) {
     // 为0或者为1就不进行缩放
-    if (size === 0 && size === 1) return
+    if (scale === 0 && scale === 1) return
     // 缩放前的transformDom大小
     const oldSize = [
       this.transformDom.offsetWidth * this.transformData.scale,
@@ -133,14 +133,14 @@ export default class TouchMoveScale {
     // 变化大小其实就是缩放的大小乘原来的大小
     this.transformData.x +=
       oldSize[0] *
-      (1 - size) *
+      (1 - scale) *
       scaleTranslateProportion[0] || 0;
     this.transformData.y +=
       oldSize[1] *
-      (1 - size) *
+      (1 - scale) *
       scaleTranslateProportion[1] || 0;
     // 设置缩放
-    this.transformData.scale *= size
+    this.transformData.scale *= scale
     this.setTransform();
   }
   // 更改移动缩放的效果
@@ -179,7 +179,7 @@ export default class TouchMoveScale {
     this.store = {
       x: 0,
       y: 0,
-      scale: 0,
+      distance: 0,
     }
     this.touchType = ''
     if (this.transformData.scale > this.maxScale) {
