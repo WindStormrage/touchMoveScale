@@ -87,6 +87,12 @@
   <div id="perspective" class="switch"></div>
   <div class="switch-label damping-label">阻尼感?</div>
   <div class="switch-label perspective-label">透视感?</div>
+  <script crossorigin="anonymous" integrity="sha384-odQ2fsrmLLFFqugfvDsBEO0wZ9enzFjCquVGvj7I5yXSVuKCjNmrHfL3OzR4kpPF" src="https://lib.baomitu.com/vConsole/3.3.4/vconsole.min.js"></script>
+  <script>
+    // 初始化
+    var vConsole = new VConsole();
+    console.log('Hello world');
+  </script>
   <script>
     class TouchMoveScale {
       constructor (option) {
@@ -120,12 +126,16 @@
         this.touchDom.addEventListener('touchstart', this.touchstart.bind(this))
         this.touchDom.addEventListener('touchmove', this.touchmove.bind(this))
         this.touchDom.addEventListener('touchend', this.touchend.bind(this))
+        this.touchDom.addEventListener('gesturechange', e => {
+          console.log(e);
+        })
         // 强制设置默认缩放中心为左上角
         this.transformDom.style.transformOrigin = "top left"
         // 设置默认的位置
         this.setTransform()
       }
       touchstart (e) {
+        console.log('touchstart');
         e.preventDefault();
         if (e.touches.length === 1) {
           // 当前屏幕上只有一个触摸点的时候就是移动
@@ -154,10 +164,13 @@
       }
       // 移动的方法: 上一次减去当前为偏移量
       move (x, y) {
+        // 当前偏移的计算
         this.transformData.x += x - this.store.x;
         this.transformData.y += y - this.store.y;
+        // 记录下来下次使用
         this.store.x = x;
         this.store.y = y;
+        // 修改css
         this.setTransform();
       }
       // 开始移动: 记录首次的触摸数据,和中心缩放比例
@@ -334,12 +347,12 @@
 </html>
 <!-- 
 遇到的问题: 
-1.双指点击的时候,不是同时点击的(移动到缩放的切换)
+         1.双指点击的时候,不是同时点击的(移动到缩放的切换)
 2.缩放大小的限制
 3.缩放中心
 4.先缩放后移动和先移动后缩放问题,两个坐标,外部容器坐标和内部元素坐标
   transform先移动后缩放其实是我们理解的先缩放后移动
-5.targetTouches Touches changeTouches 区别(可以不讲)
-  targetTouches点到里面的元素会有问题?
+          5.targetTouches Touches changeTouches 区别(可以不讲)
+            targetTouches点到里面的元素会有问题?
 6.控件z轴位移
  -->
