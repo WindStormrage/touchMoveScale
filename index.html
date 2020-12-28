@@ -87,12 +87,6 @@
   <div id="perspective" class="switch"></div>
   <div class="switch-label damping-label">阻尼感?</div>
   <div class="switch-label perspective-label">透视感?</div>
-  <script crossorigin="anonymous" integrity="sha384-odQ2fsrmLLFFqugfvDsBEO0wZ9enzFjCquVGvj7I5yXSVuKCjNmrHfL3OzR4kpPF" src="https://lib.baomitu.com/vConsole/3.3.4/vconsole.min.js"></script>
-  <script>
-    // 初始化
-    var vConsole = new VConsole();
-    console.log('Hello world');
-  </script>
   <script>
     class TouchMoveScale {
       constructor (option) {
@@ -126,16 +120,12 @@
         this.touchDom.addEventListener('touchstart', this.touchstart.bind(this))
         this.touchDom.addEventListener('touchmove', this.touchmove.bind(this))
         this.touchDom.addEventListener('touchend', this.touchend.bind(this))
-        this.touchDom.addEventListener('gesturechange', e => {
-          console.log(e);
-        })
         // 强制设置默认缩放中心为左上角
         this.transformDom.style.transformOrigin = "top left"
         // 设置默认的位置
         this.setTransform()
       }
       touchstart (e) {
-        console.log('touchstart');
         e.preventDefault();
         if (e.touches.length === 1) {
           // 当前屏幕上只有一个触摸点的时候就是移动
