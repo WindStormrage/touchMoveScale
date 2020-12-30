@@ -2,7 +2,8 @@
 
 touch-move-scale 是原生写的移动端画布移动缩放库, 你可以给元素添加单指移动和双指缩放的功能
 ### Demo
-[touch-move-scale](http://htmlpreview.github.io/?https://github.com/WindStormrage/touchMoveScale/blob/master/index.html) 请在移动端打开
+[看看呗](http://htmlpreview.github.io/?https://github.com/WindStormrage/touchMoveScale/blob/master/index.html) 请在移动端打开
+[试试呗](https://codepen.io/WindStormrage/pen/ZEpBvOZ)
 ### Install
 ```
 npm i touch-move-scale -S
