@@ -4,6 +4,8 @@ touch-move-scale 是原生写的移动端画布移动缩放库, 你可以给元�
 ### Demo
 [看看呗](http://htmlpreview.github.io/?https://github.com/WindStormrage/touchMoveScale/blob/master/index.html) 请在移动端打开
 [试试呗](https://codepen.io/WindStormrage/pen/ZEpBvOZ)
+
+![jpgesV8iv2KYNu9](https://i.loli.net/2021/01/05/jpgesV8iv2KYNu9.gif)
 ### Install
 ```
 npm i touch-move-scale -S
