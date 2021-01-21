@@ -12,9 +12,15 @@
     #touchBox {
       height: 80vh;
       width: 80vw;
+      position: relative;
       margin: 10vh 10vw;
       overflow: hidden;
       border: 1px solid rgb(199, 117, 117);
+    }
+    #transformDom {
+      position: absolute;
+      left: 0px;
+      top: 0px;
     }
     #enlargeScale, #narrowScale {
       height: 60px;
@@ -28,6 +34,7 @@
       border-radius: 50%;
       text-align: center;
       transform: translateZ(120px);
+      z-index: 2;
     }
     #narrowScale {
       bottom: 150px;
@@ -113,6 +120,15 @@
         this.touchType = ''
         // 用来储存当前缩放中心带来的位置偏移的比例
         this.scaleTranslateProportion = []
+        // 位置icon的dom
+        this.siteIconDom = new Image()
+        this.siteIconDom.src = 'https://i.loli.net/2021/01/21/4eSK5vTMWsClnoD.png'
+        this.touchDom.appendChild(this.siteIconDom)
+        this.siteIconDom.style.position = 'absolute'
+        this.siteIconDom.style.left = '-32px'
+        this.siteIconDom.style.top = '-64px'
+        this.siteIconDom.style.zIndex = '1'
+        this.siteIconDom.style.transformOrigin = "top left"
         this.init()
       }
       init() {
@@ -250,6 +266,9 @@
           ${this.perspective ? 'perspective(500px) rotateX(50deg) skewX(-10deg)' : ''}
           translate(${this.transformData.x || 0}px, ${this.transformData.y || 0}px)
           scale(${this.transformData.scale || 0}, ${this.transformData.scale || 0})`;
+        // 设置位置icon的偏移
+        this.siteIconDom.style.transform = `
+          translate(${this.transformData.x + 500 * this.transformData.scale || 0}px, ${this.transformData.y + 338 * this.transformData.scale || 0}px)`;
       }
       // 放大操作
       enlargeScale(size = 1.2) {
